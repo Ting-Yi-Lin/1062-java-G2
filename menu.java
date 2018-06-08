@@ -16,9 +16,12 @@ public class menu extends JFrame implements ActionListener{
 		private JButton Play;
 		private JButton Rank;
 		private menuPanel menuPanel;
-		private boolean vis=true;
+		private boolean vis = true;
 		
 		public menu() {
+			
+			
+			
 			menuPanel = new menuPanel();
 			
 			Play = new JButton("Play");
@@ -41,8 +44,10 @@ public class menu extends JFrame implements ActionListener{
 				setVisible(vis);
 				Russia tt = new Russia();
 				tt.mm();
-			}else if(e.getSource()==Rank) {
 				
+			}else if(e.getSource()==Rank) {
+				ReadData rd = new ReadData();
+				rd.show();
 			}
 		}
 

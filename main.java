@@ -6,14 +6,19 @@ import javax.swing.JFrame;
 
 public class main {
 
+	public static menu a;
+
 	public static void main(String[] args) {
+		show();
 		
-		menu a = new menu();
+	}
+	
+	public static void show(){
+		a = new menu();
 		a.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		a.setSize(12*26+20, 26*23+50);
 		a.add();
 		a.setVisible(true);
-		
 	}
 
 }

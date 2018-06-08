@@ -2,6 +2,7 @@ package menu;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.GridBagLayout;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -9,16 +10,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class Russia extends JPanel {
 
-	private final Point[][][] Tetraminos = {
-			{ { new Point(0, 1), new Point(1, 1), new Point(2, 1), new Point(3, 1) },
-					{ new Point(1, 0), new Point(1, 1), new Point(1, 2), new Point(1, 3) },
-					{ new Point(0, 1), new Point(1, 1), new Point(2, 1), new Point(3, 1) },
-					{ new Point(1, 0), new Point(1, 1), new Point(1, 2), new Point(1, 3) } },
+	private final Point[][][] Square = { { { new Point(0, 1), new Point(1, 1), new Point(2, 1), new Point(3, 1) },
+			{ new Point(1, 0), new Point(1, 1), new Point(1, 2), new Point(1, 3) },
+			{ new Point(0, 1), new Point(1, 1), new Point(2, 1), new Point(3, 1) },
+			{ new Point(1, 0), new Point(1, 1), new Point(1, 2), new Point(1, 3) } },
 
 			{ { new Point(0, 1), new Point(1, 1), new Point(2, 1), new Point(2, 0) },
 					{ new Point(1, 0), new Point(1, 1), new Point(1, 2), new Point(2, 2) },
@@ -56,17 +58,19 @@ public class Russia extends JPanel {
 	private Point pieceOrigin;
 	private int currentPiece;
 	private int rotation;
-	private boolean gg = false;
+	public boolean gg = false;
 
 	long score;
 	private Color[][] well;
+
+	protected JLabel gameover;
 
 	void init() {
 		well = new Color[12][24];
 		for (int i = 0; i < 12; i++) {
 			for (int j = 0; j < 23; j++) {
 				if (i == 0 || i == 11 || j == 22 || j == 0) {
-					well[i][j] = Color.BLUE;
+					well[i][j] = Color.GRAY;
 				} else {
 					well[i][j] = Color.BLACK;
 				}
@@ -78,17 +82,17 @@ public class Russia extends JPanel {
 	public void newPiece() {
 
 		Random rand = new Random();
-		pieceOrigin = new Point(rand.nextInt(6) + 2, 2);
+		pieceOrigin = new Point(rand.nextInt(6) + 2, 1);
 		rotation = 0;
 		currentPiece = rand.nextInt(7);
-		if (check(pieceOrigin.x, pieceOrigin.y + 1, rotation)) {
+		if (check(pieceOrigin.x, pieceOrigin.y, rotation))
 			gg = true;
-		}
-
+		else
+			gg = false;
 	}
 
 	private boolean check(int x, int y, int rotation) {
-		for (Point p : Tetraminos[currentPiece][rotation]) {
+		for (Point p : Square[currentPiece][rotation]) {
 			if (well[p.x + x][p.y + y] != Color.BLACK) {
 				return true;
 			}
@@ -124,13 +128,15 @@ public class Russia extends JPanel {
 	}
 
 	public void fixToWell() {
-		for (Point p : Tetraminos[currentPiece][rotation]) {
+		for (Point p : Square[currentPiece][rotation]) {
 			well[pieceOrigin.x + p.x][pieceOrigin.y + p.y] = tetraminoColors[currentPiece];
 		}
 		clearRows();
-		if(gg=true)newPiece();
+		if (gg == false)
+			newPiece();
+		
 	}
-
+	
 	public void deleteRow(int row) {
 		for (int j = row - 1; j > 0; j--) {
 			for (int i = 1; i < 11; i++) {
@@ -176,7 +182,7 @@ public class Russia extends JPanel {
 
 	private void drawPiece(Graphics g) {
 		g.setColor(tetraminoColors[currentPiece]);
-		for (Point p : Tetraminos[currentPiece][rotation]) {
+		for (Point p : Square[currentPiece][rotation]) {
 			g.fillRect((p.x + pieceOrigin.x) * 26, (p.y + pieceOrigin.y) * 26, 25, 25);
 		}
 	}
@@ -200,7 +206,7 @@ public class Russia extends JPanel {
 	public void mm() {
 		JFrame f = new JFrame("Tetris");
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		f.setSize(12 * 26 + 10, 26 * 23 + 25);
+		f.setSize(12 * 26 + 10, 26 * 23 + 50);
 		f.setVisible(true);
 
 		final Russia game = new Russia();
@@ -212,7 +218,7 @@ public class Russia extends JPanel {
 			}
 
 			public void keyPressed(KeyEvent e) {
-				if (gg = true) {
+				if (gg == false) {
 					switch (e.getKeyCode()) {
 					case KeyEvent.VK_UP:
 						game.rotate(-1);
@@ -236,15 +242,26 @@ public class Russia extends JPanel {
 			public void keyReleased(KeyEvent e) {
 			}
 		});
-
+		
 		new Thread() {
 			@Override
 			public void run() {
-				long start = System.currentTimeMillis();
-				while (!gg) {
+				while (game.gg == false) {
 					try {
 						Thread.sleep(1000);
 						game.dropDown();
+						System.out.println(gg);
+						if(game.gg==true){
+							Thread.interrupted();
+							f.setVisible(false);
+							gameover ggg = new gameover();
+							
+							ggg.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+							ggg.setSize(12 * 26 + 10, 26 * 23 + 50);
+							ggg.add();
+							ggg.setVisible(true);
+							
+						}
 					} catch (InterruptedException e) {
 					}
 				}

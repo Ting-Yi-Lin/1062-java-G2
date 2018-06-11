@@ -2,15 +2,11 @@ package menu;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.GridBagLayout;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Random;
 
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -60,8 +56,11 @@ public class Russia extends JPanel {
 	private int rotation;
 	public boolean gg = false;
 
-	long score;
+	static int score = 0;
 	private Color[][] well;
+	
+	gameover ggg;
+	
 
 	protected JLabel gameover;
 
@@ -199,9 +198,10 @@ public class Russia extends JPanel {
 
 		g.setColor(Color.WHITE);
 		g.drawString("" + score, 19 * 12, 25);
-
 		drawPiece(g);
 	}
+	
+	
 
 	public void mm() {
 		JFrame f = new JFrame("Tetris");
@@ -250,21 +250,22 @@ public class Russia extends JPanel {
 					try {
 						Thread.sleep(1000);
 						game.dropDown();
-						System.out.println(gg);
 						if(game.gg==true){
-							Thread.interrupted();
-							f.setVisible(false);
-							gameover ggg = new gameover();
 							
-							ggg.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-							ggg.setSize(12 * 26 + 10, 26 * 23 + 50);
-							ggg.add();
-							ggg.setVisible(true);
 							
 						}
 					} catch (InterruptedException e) {
 					}
 				}
+				System.out.println(score);
+				Thread.interrupted();
+				f.setVisible(false);
+				ggg = new gameover();
+				ggg.in(score);
+				ggg.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				ggg.setSize(12 * 26 + 10, 26 * 23 + 50);
+				ggg.add();
+				ggg.setVisible(true);
 			}
 		}.start();
 	}

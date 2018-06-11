@@ -1,16 +1,31 @@
 package menu;
 
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
+import java.io.FileInputStream;
+
+
 import javax.swing.JFrame;
 
-public class main {
+import javazoom.jl.player.Player;
 
+
+
+public class main {
+	public static FileInputStream fileinputstream;
 	public static menu a;
 
 	public static void main(String[] args) {
 		show();
-		
+		try {
+			fileinputstream = new  FileInputStream("resources/audio/gwyn.mp3");
+			Player player = new Player(fileinputstream);
+			while(true){
+			player.play();
+			System.out.println("Song is playing...");
+			}
+	    } catch(Exception ex) {
+	        System.out.println("Error with playing sound.");
+	        ex.printStackTrace();
+	    }
 	}
 	
 	public static void show(){

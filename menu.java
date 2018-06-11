@@ -1,6 +1,5 @@
 package menu;
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,7 +8,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
+
+import mysql.ReadData;
 
 public class menu extends JFrame implements ActionListener{
 		private JLabel background;
@@ -46,8 +46,9 @@ public class menu extends JFrame implements ActionListener{
 				tt.mm();
 				
 			}else if(e.getSource()==Rank) {
-				ReadData rd = new ReadData();
-				rd.show();
+				ReadData to = new ReadData();
+				to.read();
+				
 			}
 		}
 

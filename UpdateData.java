@@ -8,8 +8,14 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class UpdateData {
+	
+	public UpdateData(){
+		
+	}
+	
+	
 
-	public static void main(String[] args) {
+	public boolean update(String name,int score) {
 
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
@@ -25,20 +31,18 @@ public class UpdateData {
 			
 			
 			
-			PreparedStatement stmt = conn.prepareStatement("UPDATE user_table SET  user_name= ? ,user_score= ? WHERE  user_id= ?;");
-			stmt.setString(1, "hello");
-			stmt.setInt(2, 100);
-			stmt.setInt(3, 1);
+			PreparedStatement stmt = conn.prepareStatement("UPDATE user_table SET  user_score= ? WHERE  user_name= ?;");
+			stmt.setString(1, name);
+			stmt.setInt(2, score);
 			stmt.executeUpdate();
 			
 			
 
-			ResultSet rs = stmt.executeQuery("select s.user_id, user_name, user_score"
+			ResultSet rs = stmt.executeQuery("select  user_name, user_score"
 					+ " from user_table s");
-
+			
 			while (rs.next()) {
-				System.out.println(
-						rs.getInt(1) + "\t" + rs.getString(2) + "\t" + rs.getInt(3) );
+				System.out.println(rs.getInt(1) + "\t" + rs.getString(2)  );
 			}
 
 		} catch (SQLException ex) {
@@ -46,7 +50,9 @@ public class UpdateData {
 			System.out.println("SQLException: " + ex.getMessage());
 			System.out.println("SQLState: " + ex.getSQLState());
 			System.out.println("VendorError: " + ex.getErrorCode());
+			return false;
 		}
+		return true;
 
 	}
 }

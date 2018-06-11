@@ -8,8 +8,15 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class InsertData {
+	
+	private String name;
+	private int score;
+	
+	public InsertData(){
+		
+	}
 
-	public static void main(String[] args) {
+	public void insert(String name,int score) {
 
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
@@ -23,18 +30,17 @@ public class InsertData {
 					"jdbc:mysql://localhost/mydb?" + "user=root&password=kyle880821&serverTimezone=UTC&useSSL=false");
 
 			
-			PreparedStatement stmt = conn.prepareStatement("INSERT INTO user_table (user_id, user_name,user_score) VALUES (?,?,?);");
-			stmt.setInt(1, 4);
-			stmt.setString(2, "tim");
-			stmt.setInt(3, 80);
+			PreparedStatement stmt = conn.prepareStatement("INSERT INTO user_table ( user_name,user_score) VALUES (?,?);");
+			stmt.setString(1, name);
+			stmt.setInt(2, score);
 			stmt.executeUpdate();
 
-			ResultSet rs = stmt.executeQuery("select s.user_id, user_name, user_score"
+			ResultSet rs = stmt.executeQuery("select  user_name, user_score"
 					+ " from user_table s");
 
 			while (rs.next()) {
 				System.out.println(
-						rs.getInt(1) + "\t" + rs.getString(2) + "\t" + rs.getInt(3) );
+						rs.getInt(1) + "\t" + rs.getString(2)  );
 			}
 
 		} catch (SQLException ex) {

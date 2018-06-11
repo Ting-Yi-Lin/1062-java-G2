@@ -8,8 +8,14 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class DeleteData {
+	
+	private String name;
+	
+	public DeleteData(String name,int score){
+		this.name = name;
+	}
 
-	public static void main(String[] args) {
+	public void Delete() {
 
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
@@ -24,8 +30,8 @@ public class DeleteData {
 
 			
 			
-			PreparedStatement stmt = conn.prepareStatement("DELETE FROM user_table WHERE user_id = ?;");
-			stmt.setInt(1, 3);
+			PreparedStatement stmt = conn.prepareStatement("DELETE FROM user_table WHERE user_name = ?;");
+			stmt.setString(1, name);
 			stmt.executeUpdate();
 
 			ResultSet rs = stmt.executeQuery("select s.user_id, user_name, user_score"
